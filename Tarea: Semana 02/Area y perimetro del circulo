@@ -1,1 +1,61 @@
+using System;
+
+namespace FigurasGeometricas
+{
+    // Clase para representar un Círculo
+    public class Circulo
+    {
+        // Campo privado que representa el radio del círculo
+        private double radio;
+
+        // Constructor para inicializar el radio
+        public Circulo(double radio)
+        {
+            this.radio = radio;
+        }
+
+        // Propiedad para acceder y modificar el radio
+        public double Radio
+        {
+            get { return radio; }
+            set { radio = value; }
+        }
+
+        // Método para calcular el área del círculo
+        public double CalcularArea()
+        {
+            return Math.PI * Math.Pow(radio, 2);
+        }
+
+        // Método para calcular el perímetro del círculo (circunferencia)
+        public double CalcularPerimetro()
+        {
+            return 2 * Math.PI * radio;
+        }
+    }
+
+    // Clase principal para probar la clase Circulo
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Crear un objeto de tipo Circulo con radio 5
+            Circulo circulo = new Circulo(5);
+
+            // Mostrar el área y el perímetro del círculo
+            Console.WriteLine("Círculo:");
+            Console.WriteLine("Área: " + circulo.CalcularArea());
+            Console.WriteLine("Perímetro: " + circulo.CalcularPerimetro());
+
+            // Cambiar el radio del círculo
+            circulo.Radio = 10;
+
+            // Mostrar el nuevo área y perímetro con el radio actualizado
+            Console.WriteLine("\nCírculo con radio actualizado:");
+            Console.WriteLine("Área: " + circulo.CalcularArea());
+            Console.WriteLine("Perímetro: " + circulo.CalcularPerimetro());
+        }
+    }
+}
+
 
