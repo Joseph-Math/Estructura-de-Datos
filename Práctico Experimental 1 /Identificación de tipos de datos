@@ -1,1 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <string>
 
+// Definición de las clases (simplificadas)
+class Paciente {
+public:
+    std::string nombre;
+    int ID;
+};
+
+class Cita {
+public:
+    std::string fecha;
+    std::string hora;
+    Paciente paciente;
+};
+
+class Clinica {
+public:
+    std::map<std::string, std::vector<Cita>> agendaCitas;
+
+    void agendarCita(Cita cita) {
+        agendaCitas[cita.fecha].push_back(cita);
+    }
+
+    void generarReporteCitasPorFecha(std::string fecha) {
+      if (agendaCitas.count(fecha)) {
+        std::cout << "Citas para el " << fecha << ":\n";
+        for (const auto& cita : agendaCitas[fecha]) {
+          std::cout << "Hora: " << cita.hora << ", Paciente: " << cita.paciente.nombre << "\n";
+        }
+      } else {
+        std::cout << "No hay citas para esa fecha.\n";
+      }
+    }
+};
+
+int main() {
+    Clinica miClinica;
+    Paciente paciente1;
+    paciente1.nombre = "José Luis Maldonado";
+    Paciente paciente2;
+    paciente2.nombre = "Ana Rodríguez";
+    Cita cita1;
+    cita1.fecha = "2024-03-15";
+    cita1.hora = "10:00";
+    cita1.paciente = paciente1;
+    Cita cita2;
+    cita2.fecha = "2024-03-15";
+    cita2.hora = "11:00";
+    cita2.paciente = paciente2;
+    miClinica.agendarCita(cita1);
+    miClinica.agendarCita(cita2);
+    miClinica.generarReporteCitasPorFecha("2024-03-15");
+    return 0;
+}
