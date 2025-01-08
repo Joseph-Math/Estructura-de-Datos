@@ -1,1 +1,70 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
+namespace Estadistica
+{
+    public class CalculadoraEstadistica
+    {
+        private List<double> numeros;
+
+        public CalculadoraEstadistica(string entrada)
+        {
+            numeros = new List<double>();
+            try
+            {
+                // Divide la entrada por comas y convierte a números. Maneja posibles errores de formato.
+                numeros = entrada.Split(',').Select(double.Parse).ToList();
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Error: Entrada inválida. Asegúrate de ingresar números separados por comas.");
+                numeros = null; // Indica que hubo un error
+            }
+        }
+
+        public double CalcularMedia()
+        {
+            if (numeros == null || numeros.Count == 0)
+            {
+                return 0; // Evita división por cero o errores si no hay números
+            }
+            return numeros.Average();
+        }
+
+        public double CalcularDesviacionTipica()
+        {
+            if (numeros == null || numeros.Count <= 1)
+            {
+                return 0; // La desviación típica no tiene sentido con menos de 2 números
+            }
+
+            double media = CalcularMedia();
+            double sumaCuadrados = numeros.Sum(x => Math.Pow(x - media, 2));
+            return Math.Sqrt(sumaCuadrados / (numeros.Count - 1)); // Se usa n-1 para la desviación estándar muestral.
+        }
+
+        public void MostrarResultados()
+        {
+            if (numeros == null) return; // No hay datos para mostrar si hubo error en la entrada
+
+            Console.WriteLine("Números ingresados: " + string.Join(", ", numeros));
+            Console.WriteLine("Media: " + CalcularMedia());
+            Console.WriteLine("Desviación típica: " + CalcularDesviacionTipica());
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Ingresa una muestra de números separados por comas:");
+            string entrada = Console.ReadLine();
+
+            CalculadoraEstadistica calculadora = new CalculadoraEstadistica(entrada);
+            calculadora.MostrarResultados();
+
+            Console.ReadKey(); // Para que la consola no se cierre inmediatamente
+        }
+    }
+}
