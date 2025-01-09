@@ -1,1 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
+// Clase que maneja la lista de números (enfoque orientado a objetos)
+public class ListaNumeros
+{
+    private List<int> numeros;
+
+    public ListaNumeros()
+    {
+        numeros = new List<int>();
+        // Inicializar la lista con números del 1 al 10
+        for (int i = 1; i <= 10; i++)
+        {
+            numeros.Add(i);
+        }
+    }
+
+    public void MostrarInversoConComas()
+    {
+        // Usando LINQ para invertir la lista y string.Join para formatear la salida
+        string resultado = string.Join(", ", numeros.AsEnumerable().Reverse());
+        Console.WriteLine(resultado);
+
+        // Otra opción sin LINQ (más manual)
+        //for (int i = numeros.Count - 1; i >= 0; i--)
+        //{
+        //    Console.Write(numeros[i]);
+        //    if (i > 0)
+        //    {
+        //        Console.Write(", ");
+        //    }
+        //}
+        //Console.WriteLine(); // Nueva línea al final
+    }
+
+    public List<int> ObtenerLista(){
+        return numeros;
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        // Crear una instancia de la clase ListaNumeros
+        ListaNumeros miLista = new ListaNumeros();
+
+        // Mostrar la lista en orden inverso con comas
+        miLista.MostrarInversoConComas();
+
+
+        //Ejemplo de como usar la funcion ObtenerLista
+        List<int> otraLista = miLista.ObtenerLista();
+        Console.WriteLine("Ejemplo de uso de ObtenerLista");
+        foreach(int num in otraLista){
+            Console.Write(num + " ");
+        }
+        Console.WriteLine();
+    }
+}
