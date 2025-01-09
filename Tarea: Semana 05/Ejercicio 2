@@ -1,1 +1,66 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
+public class Vector
+{
+    private List<double> componentes;
+
+    public Vector(List<double> componentes)
+    {
+        if (componentes == null || componentes.Count == 0)
+        {
+            throw new ArgumentException("El vector debe tener al menos una componente.");
+        }
+        this.componentes = componentes;
+    }
+
+    public double ProductoEscalar(Vector otroVector)
+    {
+        if (this.componentes.Count != otroVector.componentes.Count)
+        {
+            throw new ArgumentException("Los vectores deben tener la misma dimensión para calcular el producto escalar.");
+        }
+
+        double producto = 0;
+        for (int i = 0; i < this.componentes.Count; i++)
+        {
+            producto += this.componentes[i] * otroVector.componentes[i];
+        }
+        return producto;
+    }
+
+    public override string ToString()
+    {
+        return "(" + string.Join(",", componentes) + ")";
+    }
+
+    public static void Main(string[] args)
+    {
+        try
+        {
+            List<double> componentes1 = new List<double> { 1, 2, 3 };
+            List<double> componentes2 = new List<double> { -1, 0, 2 };
+
+            Vector vector1 = new Vector(componentes1);
+            Vector vector2 = new Vector(componentes2);
+
+            Console.WriteLine($"Vector 1: {vector1}");
+            Console.WriteLine($"Vector 2: {vector2}");
+
+            double productoEscalar = vector1.ProductoEscalar(vector2);
+            Console.WriteLine($"Producto escalar: {productoEscalar}");
+
+            //Ejemplo con vectores de diferente dimension
+            List<double> componentes3 = new List<double> { 1, 2};
+            Vector vector3 = new Vector(componentes3);
+            vector1.ProductoEscalar(vector3);
+
+
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+}
