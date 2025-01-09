@@ -1,1 +1,65 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
+namespace AbecedarioFiltrado
+{
+    public class Abecedario
+    {
+        private List<char> letras;
+
+        public Abecedario()
+        {
+            letras = Enumerable.Range('a', 26).Select(x => (char)x).ToList(); // Genera el abecedario de la 'a' a la 'z'
+        }
+
+        public void FiltrarMultiplosDeTres()
+        {
+            // Usar un bucle for inverso para evitar problemas de índices al eliminar elementos
+            for (int i = letras.Count - 1; i >= 0; i--)
+            {
+                if ((i + 1) % 3 == 0) // +1 porque los índices comienzan en 0, pero las posiciones en 1
+                {
+                    letras.RemoveAt(i);
+                }
+            }
+        }
+
+        public void MostrarAbecedario()
+        {
+            Console.WriteLine("Abecedario filtrado:");
+            foreach (char letra in letras)
+            {
+                Console.Write(letra + " ");
+            }
+            Console.WriteLine();
+        }
+
+        public List<char> ObtenerAbecedarioFiltrado()
+        {
+            return new List<char>(letras); // Devuelve una copia para evitar modificaciones externas
+        }
+    }
+
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            Abecedario miAbecedario = new Abecedario();
+
+            Console.WriteLine("Abecedario original:");
+            miAbecedario.MostrarAbecedario();
+
+            miAbecedario.FiltrarMultiplosDeTres();
+
+            miAbecedario.MostrarAbecedario();
+
+            // Ejemplo de obtener la lista filtrada:
+            List<char> abecedarioFiltrado = miAbecedario.ObtenerAbecedarioFiltrado();
+            Console.WriteLine("\nAbecedario filtrado obtenido como lista:");
+            Console.WriteLine(string.Join(" ", abecedarioFiltrado));
+
+            Console.ReadKey();
+        }
+    }
+}
