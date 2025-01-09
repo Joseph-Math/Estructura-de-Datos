@@ -1,1 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
+public class ContadorVocales
+{
+    private string palabra;
+
+    public ContadorVocales(string palabra)
+    {
+        this.palabra = palabra.ToLower(); // Convertir a minúsculas para contar independientemente de mayúsculas/minúsculas
+    }
+
+    public Dictionary<char, int> ContarVocales()
+    {
+        Dictionary<char, int> conteoVocales = new Dictionary<char, int>()
+        {
+            {'a', 0},
+            {'e', 0},
+            {'i', 0},
+            {'o', 0},
+            {'u', 0}
+        };
+
+        foreach (char letra in palabra)
+        {
+            if (conteoVocales.ContainsKey(letra))
+            {
+                conteoVocales[letra]++;
+            }
+        }
+
+        return conteoVocales;
+    }
+
+    public void MostrarConteo()
+    {
+        Dictionary<char, int> conteo = ContarVocales();
+
+        Console.WriteLine($"Conteo de vocales en la palabra '{palabra}':");
+        foreach (var kvp in conteo)
+        {
+            Console.WriteLine($"{kvp.Key}: {kvp.Value}");
+        }
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        Console.Write("Ingrese una palabra: ");
+        string palabraIngresada = Console.ReadLine();
+
+        ContadorVocales contador = new ContadorVocales(palabraIngresada);
+        contador.MostrarConteo();
+        Console.ReadKey(); // Para que la consola no se cierre inmediatamente
+    }
+}
