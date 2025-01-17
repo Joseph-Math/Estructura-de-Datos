@@ -1,1 +1,145 @@
+using System;
+using System.Collections.Generic;
 
+public class Nodo
+{
+    public double Dato;
+    public Nodo Siguiente;
+
+    public Nodo(double dato)
+    {
+        Dato = dato;
+        Siguiente = null;
+    }
+}
+
+public class ListaEnlazada
+{
+    private Nodo cabeza;
+
+    public ListaEnlazada()
+    {
+        cabeza = null;
+    }
+
+    public void Insertar(double dato)
+    {
+        Nodo nuevoNodo = new Nodo(dato);
+        if (cabeza == null)
+        {
+            cabeza = nuevoNodo;
+        }
+        else
+        {
+            Nodo temp = cabeza;
+            while (temp.Siguiente != null)
+            {
+                temp = temp.Siguiente;
+            }
+            temp.Siguiente = nuevoNodo;
+        }
+    }
+
+    public double CalcularPromedio()
+    {
+        if (cabeza == null)
+        {
+            return 0; // Evitar división por cero si la lista está vacía
+        }
+
+        double suma = 0;
+        int contador = 0;
+        Nodo temp = cabeza;
+        while (temp != null)
+        {
+            suma += temp.Dato;
+            contador++;
+            temp = temp.Siguiente;
+        }
+        return suma / contador;
+    }
+
+    public void MostrarLista()
+    {
+        if (cabeza == null)
+        {
+            Console.WriteLine("La lista está vacía.");
+            return;
+        }
+
+        Nodo temp = cabeza;
+        while (temp != null)
+        {
+            Console.Write(temp.Dato + " ");
+            temp = temp.Siguiente;
+        }
+        Console.WriteLine();
+    }
+
+        public ListaEnlazada FiltrarMenoresOIguales(double promedio)
+    {
+        ListaEnlazada listaMenores = new ListaEnlazada();
+        Nodo temp = cabeza;
+        while (temp != null)
+        {
+            if (temp.Dato <= promedio)
+            {
+                listaMenores.Insertar(temp.Dato);
+            }
+            temp = temp.Siguiente;
+        }
+        return listaMenores;
+    }
+
+    public ListaEnlazada FiltrarMayores(double promedio)
+    {
+        ListaEnlazada listaMayores = new ListaEnlazada();
+        Nodo temp = cabeza;
+        while (temp != null)
+        {
+            if (temp.Dato > promedio)
+            {
+                listaMayores.Insertar(temp.Dato);
+            }
+            temp = temp.Siguiente;
+        }
+        return listaMayores;
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        ListaEnlazada listaPrincipal = new ListaEnlazada();
+
+        // Pedir al usuario la cantidad de datos
+        Console.Write("Ingrese la cantidad de datos: ");
+        int cantidadDatos = int.Parse(Console.ReadLine());
+
+        // Pedir al usuario que ingrese los datos
+        for (int i = 0; i < cantidadDatos; i++)
+        {
+            Console.Write($"Ingrese el dato {i + 1}: ");
+            double dato = double.Parse(Console.ReadLine());
+            listaPrincipal.Insertar(dato);
+        }
+        
+
+        Console.Write("Los datos cargados en la lista principal son: ");
+        listaPrincipal.MostrarLista();
+
+        double promedio = listaPrincipal.CalcularPromedio();
+        Console.WriteLine("El promedio es: " + promedio);
+
+        ListaEnlazada listaMenores = listaPrincipal.FiltrarMenoresOIguales(promedio);
+        Console.Write("Los datos menores o iguales al promedio son: ");
+        listaMenores.MostrarLista();
+
+        ListaEnlazada listaMayores = listaPrincipal.FiltrarMayores(promedio);
+        Console.Write("Los datos mayores al promedio son: ");
+        listaMayores.MostrarLista();
+
+        Console.ReadKey(); // Para que la consola no se cierre inmediatamente
+    }
+}
