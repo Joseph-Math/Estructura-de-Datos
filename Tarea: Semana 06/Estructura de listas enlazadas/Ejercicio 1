@@ -1,1 +1,114 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
+public class Nodo
+{
+    public int Dato { get; set; }
+    public Nodo Siguiente { get; set; }
+
+    public Nodo(int dato)
+    {
+        Dato = dato;
+        Siguiente = null;
+    }
+}
+
+public class ListaEnlazada
+{
+    public Nodo Cabeza { get; set; }
+
+    public ListaEnlazada()
+    {
+        Cabeza = null;
+    }
+
+    public void InsertarInicio(int dato)
+    {
+        Nodo nuevoNodo = new Nodo(dato);
+        nuevoNodo.Siguiente = Cabeza;
+        Cabeza = nuevoNodo;
+    }
+
+    public int ContarNodos()
+    {
+        int contador = 0;
+        Nodo actual = Cabeza;
+        while (actual != null)
+        {
+            contador++;
+            actual = actual.Siguiente;
+        }
+        return contador;
+    }
+
+    public bool CompararContenido(ListaEnlazada otraLista)
+    {
+         Nodo nodoActualLista1 = this.Cabeza;
+         Nodo nodoActualLista2 = otraLista.Cabeza;
+
+        while(nodoActualLista1 != null && nodoActualLista2 != null){
+            if(nodoActualLista1.Dato != nodoActualLista2.Dato){
+                return false; //Si un dato es diferente, las listas no son iguales
+            }
+            nodoActualLista1 = nodoActualLista1.Siguiente;
+            nodoActualLista2 = nodoActualLista2.Siguiente;
+        }
+        return true; //Si se llega al final sin diferencias, las listas son iguales
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        ListaEnlazada lista1 = new ListaEnlazada();
+        ListaEnlazada lista2 = new ListaEnlazada();
+
+        // Carga de datos para la primera lista
+        Console.WriteLine("Ingrese los datos para la primera lista (ingrese un valor no numérico para finalizar):");
+        CargarLista(lista1);
+
+        // Carga de datos para la segunda lista
+        Console.WriteLine("\nIngrese los datos para la segunda lista (ingrese un valor no numérico para finalizar):");
+        CargarLista(lista2);
+
+        int cantidadLista1 = lista1.ContarNodos();
+        int cantidadLista2 = lista2.ContarNodos();
+
+        bool contenidoIgual = lista1.CompararContenido(lista2);
+
+        Console.WriteLine("\nResultados de la comparación:");
+
+        if (cantidadLista1 == cantidadLista2 && contenidoIgual)
+        {
+            Console.WriteLine("a. Las listas son iguales en tamaño y en contenido.");
+        }
+        else if (cantidadLista1 == cantidadLista2 && !contenidoIgual)
+        {
+            Console.WriteLine("b. Las listas son iguales en tamaño pero no en contenido.");
+        }
+        else
+        {
+            Console.WriteLine("c. No tienen el mismo tamaño ni contenido.");
+        }
+
+        Console.ReadKey();
+    }
+
+    static void CargarLista(ListaEnlazada lista)
+    {
+        while (true)
+        {
+            Console.Write("Ingrese un número entero: ");
+            if (int.TryParse(Console.ReadLine(), out int numero))
+            {
+                lista.InsertarInicio(numero);
+            }
+            else
+            {
+                break; // Sale del ciclo si la entrada no es un número entero
+            }
+        }
+    }
+}
