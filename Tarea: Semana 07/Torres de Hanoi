@@ -1,1 +1,22 @@
+{
+    static void ResolverHanoi(int n, string origen, string destino, string auxiliar)
+    {
+        if (n == 1)
+        {
+            Console.WriteLine($"Mover disco 1 de {origen} a {destino}");
+            return;
+        }
+
+        ResolverHanoi(n - 1, origen, auxiliar, destino);
+        Console.WriteLine($"Mover disco {n} de {origen} a {destino}");
+        ResolverHanoi(n - 1, auxiliar, destino, origen);
+    }
+
+    static void Main()
+    {
+        int numeroDeDiscos = 3;
+        ResolverHanoi(numeroDeDiscos, "A", "C", "B");
+    }
+}
+
 
