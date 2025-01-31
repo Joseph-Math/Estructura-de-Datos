@@ -1,1 +1,142 @@
+public class Atraccion
+{
+    private Queue<string> colaEspera = new Queue<string>();
+    private int capacidad = 30;
+
+    public void AgregarPersona(string nombre)
+    {
+        if (colaEspera.Count < capacidad)
+        {
+            colaEspera.Enqueue(nombre);
+            Console.WriteLine($"{nombre} ha sido agregado a la cola.");
+        }
+        else
+        {
+            Console.WriteLine("Todos los asientos han sido vendidos.");
+        }
+    }
+
+    public void SubirAtraccion()
+    {
+        while (colaEspera.Count > 0)
+        {
+            string persona = colaEspera.Dequeue();
+            Console.WriteLine($"{persona} ha subido a la atracción.");
+        }
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        Atraccion atraccion = new Atraccion();
+        for (int i = 1; i <= 35; i++)
+        {
+            atraccion.AgregarPersona($"Persona {i}");
+        }
+        atraccion.SubirAtraccion();
+    }
+}
+public class NavegadorWeb
+{
+    private Stack<string> historial = new Stack<string>();
+
+    public void NavegarA(string url)
+    {
+        historial.Push(url);
+        Console.WriteLine($"Navegando a {url}");
+    }
+
+    public void Retroceder()
+    {
+        if (historial.Count > 1)
+        {
+            historial.Pop();
+            Console.WriteLine($"Retrocediendo a {historial.Peek()}");
+        }
+        else
+        {
+            Console.WriteLine("No hay más páginas para retroceder.");
+        }
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        NavegadorWeb navegador = new NavegadorWeb();
+        navegador.NavegarA("http://pagina1.com");
+        navegador.NavegarA("http://pagina2.com");
+        navegador.NavegarA("http://pagina3.com");
+        navegador.Retroceder();
+        navegador.Retroceder();
+        navegador.Retroceder();
+    }
+}
+public class Auditorio
+{
+    private Queue<string> colaIngreso1 = new Queue<string>();
+    private Queue<string> colaIngreso2 = new Queue<string>();
+    private int capacidad = 100;
+    private int asientosAsignados = 0;
+
+    public void AgregarPersona(string nombre, int cola)
+    {
+        if (asientosAsignados < capacidad)
+        {
+            if (cola == 1)
+            {
+                colaIngreso1.Enqueue(nombre);
+            }
+            else
+            {
+                colaIngreso2.Enqueue(nombre);
+            }
+            Console.WriteLine($"{nombre} ha sido agregado a la cola {cola}.");
+        }
+        else
+        {
+            Console.WriteLine("Todos los asientos han sido asignados.");
+        }
+    }
+
+    public void AsignarAsientos()
+    {
+        while (asientosAsignados < capacidad && (colaIngreso1.Count > 0 || colaIngreso2.Count > 0))
+        {
+            if (colaIngreso1.Count > 0)
+            {
+                string persona = colaIngreso1.Dequeue();
+                asientosAsignados++;
+                Console.WriteLine($"{persona} ha sido asignado al asiento {asientosAsignados}.");
+            }
+
+            if (asientosAsignados < capacidad && colaIngreso2.Count > 0)
+            {
+                string persona = colaIngreso2.Dequeue();
+                asientosAsignados++;
+                Console.WriteLine($"{persona} ha sido asignado al asiento {asientosAsignados}.");
+            }
+        }
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        Auditorio auditorio = new Auditorio();
+        for (int i = 1; i <= 60; i++)
+        {
+            auditorio.AgregarPersona($"Persona {i}", 1);
+        }
+        for (int i = 61; i <= 120; i++)
+        {
+            auditorio.AgregarPersona($"Persona {i}", 2);
+        }
+        auditorio.AsignarAsientos();
+    }
+}
 
