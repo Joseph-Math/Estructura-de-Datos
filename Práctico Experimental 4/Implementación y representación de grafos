@@ -1,1 +1,147 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+class Grafo
+{
+    private Dictionary<int, List<int>> adyacencias;
+
+    public Grafo()
+    {
+        adyacencias = new Dictionary<int, List<int>>();
+    }
+
+    public void AgregarArista(int origen, int destino)
+    {
+        if (!adyacencias.ContainsKey(origen))
+            adyacencias[origen] = new List<int>();
+        if (!adyacencias.ContainsKey(destino))
+            adyacencias[destino] = new List<int>();
+
+        adyacencias[origen].Add(destino);
+        adyacencias[destino].Add(origen);
+    }
+
+    public void CentralidadGrado()
+    {
+        Console.WriteLine("Centralidad de Grado:");
+        foreach (var nodo in adyacencias)
+        {
+            Console.WriteLine($"Nodo {nodo.Key}: {nodo.Value.Count}");
+        }
+    }
+
+    public void CentralidadCercania()
+    {
+        Console.WriteLine("\nCentralidad de Cercanía:");
+        foreach (var nodo in adyacencias.Keys)
+        {
+            var distanciaTotal = BFS(nodo).Values.Sum();
+            double cercania = distanciaTotal > 0 ? 1.0 / distanciaTotal : 0;
+            Console.WriteLine($"Nodo {nodo}: {cercania:F4}");
+        }
+    }
+
+    public void CentralidadBetweenness()
+    {
+        Console.WriteLine("\nCentralidad de Betweenness:");
+        Dictionary<int, double> betweenness = adyacencias.Keys.ToDictionary(n => n, n => 0.0);
+
+        foreach (int s in adyacencias.Keys)
+        {
+            Stack<int> S = new Stack<int>();
+            Dictionary<int, List<int>> P = new Dictionary<int, List<int>>();
+            Dictionary<int, int> sigma = adyacencias.Keys.ToDictionary(v => v, v => 0);
+            Dictionary<int, int> d = adyacencias.Keys.ToDictionary(v => v, v => -1);
+
+            sigma[s] = 1;
+            d[s] = 0;
+            Queue<int> Q = new Queue<int>();
+            Q.Enqueue(s);
+
+            while (Q.Count > 0)
+            {
+                int v = Q.Dequeue();
+                S.Push(v);
+                foreach (int w in adyacencias[v])
+                {
+                    if (d[w] < 0)
+                    {
+                        Q.Enqueue(w);
+                        d[w] = d[v] + 1;
+                    }
+                    if (d[w] == d[v] + 1)
+                    {
+                        sigma[w] += sigma[v];
+                        if (!P.ContainsKey(w)) P[w] = new List<int>();
+                        P[w].Add(v);
+                    }
+                }
+            }
+
+            Dictionary<int, double> delta = adyacencias.Keys.ToDictionary(v => v, v => 0.0);
+            while (S.Count > 0)
+            {
+                int w = S.Pop();
+                if (P.ContainsKey(w))
+                {
+                    foreach (int v in P[w])
+                    {
+                        delta[v] += (sigma[v] / (double)sigma[w]) * (1 + delta[w]);
+                    }
+                }
+                if (w != s)
+                    betweenness[w] += delta[w];
+            }
+        }
+
+        foreach (var kvp in betweenness)
+        {
+            Console.WriteLine($"Nodo {kvp.Key}: {kvp.Value:F4}");
+        }
+    }
+
+    private Dictionary<int, int> BFS(int inicio)
+    {
+        Dictionary<int, int> distancias = adyacencias.Keys.ToDictionary(n => n, n => int.MaxValue);
+        Queue<int> cola = new Queue<int>();
+        cola.Enqueue(inicio);
+        distancias[inicio] = 0;
+
+        while (cola.Count > 0)
+        {
+            int actual = cola.Dequeue();
+            foreach (var vecino in adyacencias[actual])
+            {
+                if (distancias[vecino] == int.MaxValue)
+                {
+                    distancias[vecino] = distancias[actual] + 1;
+                    cola.Enqueue(vecino);
+                }
+            }
+        }
+        return distancias;
+    }
+}
+
+class Programa
+{
+    static void Main()
+    {
+        Grafo grafo = new Grafo();
+
+        // Definir un grafo simple
+        grafo.AgregarArista(0, 1);
+        grafo.AgregarArista(0, 2);
+        grafo.AgregarArista(1, 2);
+        grafo.AgregarArista(2, 3);
+        grafo.AgregarArista(3, 4);
+
+        grafo.CentralidadGrado();
+        grafo.CentralidadCercania();
+        grafo.CentralidadBetweenness();
+
+        Console.ReadLine();
+    }
+}
 
